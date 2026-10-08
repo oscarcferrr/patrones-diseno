@@ -14,6 +14,7 @@
 //* [WARNING:2025-10-21:07] El uso de memoria está alto.
 //* [ERROR:2025-10-21:07] Error de conexión a la base de datos.
 
+import { info } from "node:console";
 import { COLORS } from '../helpers/colors.ts';
 
 function formatDate(date: Date): string {
@@ -33,7 +34,23 @@ type LogLevel = 'info' | 'warn' | 'error';
 function createLogger(level: LogLevel) {
   // Retorna una función que recibe el "message" como argumento
   // Completar: implementar el logger con formato y color para cada nivel
-  throw new Error('Not implemented');
+    return function(message: string){
+      const timestamp = formatDate(new Date());
+      const logColor ={
+         info: COLORS.white,
+         warn: COLORS.yellow,
+         error: COLORS.red
+
+      }
+
+      const prefix = {
+        info: 'INFO',
+        warn:  'WARNING',
+        error: 'ERROR'
+      }
+
+      return console.log(`%c[${prefix[level]} ${timestamp}] ${message}`, logColor[level]); 
+    }
 }
 
 // Ejemplo de uso

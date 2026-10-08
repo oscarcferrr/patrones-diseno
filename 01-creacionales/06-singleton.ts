@@ -1,3 +1,4 @@
+import { COLORS } from '../helpers/colors.ts';
 /**
  * ! Singleton:
  * Es un patrón de diseño creacional que garantiza que una clase
@@ -9,3 +10,68 @@
  *
  * https://refactoring.guru/es/design-patterns/singleton
  */
+
+class DragonBalls {
+    private static instance: DragonBalls;
+    private ballsCollected: number;
+
+    private constructor(){
+        this.ballsCollected =0;
+    }
+
+    public static getInstance(): DragonBalls {
+        if(!DragonBalls.instance){
+            DragonBalls.instance = new DragonBalls();
+            console.log('%cLas pelotas del Dragón han sido creadas!', COLORS.green)
+        }
+        return DragonBalls.instance;
+    }
+
+    collectBall():void{
+        if(this.ballsCollected<7){
+            this.ballsCollected++;
+            console.log(`Esfera recolectada. Total de esferas: ${this.ballsCollected}`);
+            return;
+        }
+
+        console.log('Ya sen han recolectado las 7 esferas del Dragón! Invoca a Shenlog')
+
+    }
+
+    summonShenlong(){
+        if(this.ballsCollected === 7){
+            console.log('Shenlong ha sido invocado, Pide tu deseo!');
+            this.ballsCollected = 0;
+            return;
+        }
+
+        console.log(`\nAún faltan ${7 - this.ballsCollected} pelotas para convocar a shenlog`)
+
+    }
+
+}
+
+
+function main(){
+
+    const gokuDragonBalls = DragonBalls.getInstance();
+
+    gokuDragonBalls.collectBall();
+    gokuDragonBalls.collectBall();
+    gokuDragonBalls.collectBall();
+
+    gokuDragonBalls.summonShenlong();
+
+    const vegetaDragonBalls = DragonBalls.getInstance();
+    vegetaDragonBalls.collectBall();
+    vegetaDragonBalls.collectBall();
+    vegetaDragonBalls.collectBall();
+    vegetaDragonBalls.collectBall();
+
+    gokuDragonBalls.summonShenlong();
+
+    vegetaDragonBalls.summonShenlong();
+
+}
+
+main();
