@@ -1,3 +1,4 @@
+import { COLORS } from '../helpers/colors.ts';
 /**
  * ! Patrón Observer
  * El patrón Observer es un patrón de diseño de comportamiento que establece
@@ -13,3 +14,83 @@
  *
  * https://refactoring.guru/es/design-patterns/observer
  */
+
+
+interface Observer {
+    notify(videoTitle: string): void;
+}
+
+class YouTubeChannel{
+    private subscribers: Observer[] = [];
+    private name: string;
+
+    constructor(name: string){
+        this.name = name;
+    }
+
+    subscribe(observer: Observer): void{
+        this.subscribers.push(observer);
+
+        console.log(`Nuevo suscriptor al canal %c${this.name}`, COLORS.green)
+    }
+
+
+    unsucribe(observer:Observer):void{
+        this.subscribers = this.subscribers.filter(sub => sub != observer);
+        console.log(`Un suscriptor al canal %c${this.name} %cse ha dado de baja`, COLORS.green,COLORS.white)
+    }
+
+
+    uploadVdeo(videoTitle: string): void {
+        console.log(`Canal ${this.name} ha subido un nuevo video %c${ videoTitle}`, COLORS.green);
+
+        for(const suscribe of this.subscribers){
+            suscribe.notify(videoTitle);
+        }
+    }
+}
+
+
+class Subscriber implements Observer{
+
+    private name: string;
+
+    constructor(name: string){
+        this.name = name;
+    }
+
+    notify(videoTitle: string): void {
+        console.log(`%c${this.name} %chas sido notificado: %cNuevo video ${videoTitle} `
+            ,COLORS.green,
+            COLORS.yellow, 
+             COLORS.blue);    
+
+    }
+}
+
+function main(){
+    const channel = new YouTubeChannel('Programando con Fernando');
+
+    const melissa = new Subscriber('Melissa');
+    const cesar = new Subscriber('Cesar');
+    const emi = new Subscriber('Emi');
+
+    channel.subscribe(melissa);
+    channel.subscribe(cesar);
+
+    channel.uploadVdeo('POO de 0 a experto');
+    
+    channel.subscribe(emi);
+
+    channel.uploadVdeo('GIT de 0 a experto');
+
+    channel.unsucribe(cesar);
+
+    channel.uploadVdeo('Doker de 0 a experto');
+
+    console.log('\n\n');
+
+
+    }
+
+main();

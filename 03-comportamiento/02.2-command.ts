@@ -67,21 +67,30 @@ class TextEditor {
 
 // 3. Clases de Comandos Concretos
 class CopyCommand implements Command {
-  private editor: TextEditor;
+  
+  constructor( private editor: TextEditor){}
 
-  // TODO: Inyectar el editor en el constructor y el método execute con la acción respectiva
+  execute(): void {
+    this.editor.copy();
+  }
 }
 
 class PasteCommand implements Command {
-  private editor: TextEditor;
+  constructor(private editor: TextEditor) { }
 
-  // TODO: Inyectar el editor en el constructor y el método execute con la acción respectiva
+  execute(): void {
+    this.editor.paste();
+  }
+
 }
 
 class UndoCommand implements Command {
-  private editor: TextEditor;
+  constructor(private editor: TextEditor) { }
 
-  // TODO: Inyectar el editor en el constructor y el método execute con la acción respectiva
+  execute(): void {
+    this.editor.undo();
+  }
+
 }
 
 // 4. Clase Cliente - Toolbar
@@ -90,13 +99,14 @@ class Toolbar {
   private commands: Record<string, Command> = {};
 
   setCommand(button: string, command: Command): void {
-    // TODO: Asignar el comando al botón correspondiente
+    this.commands[button] = command;
   }
 
   clickButton(button: string): void {
-    //TODO: Ejecutar el comando correspondiente al botón
-
-    // TODO: Manejar el caso en que no haya un comando asignado al botón
+    if (this.commands[button]) {
+      this.commands[button].execute();
+      return;
+    }
     console.error(`No hay un comando asignado al botón "${button}"`);
   }
 }
